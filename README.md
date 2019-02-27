@@ -5,4 +5,7 @@ Quang-Thinh Ha - qth20@bu.edu
 
 Christopher Reyes - chrislr@bu.edu
 
+Shelby Sundquist - sundqshe@bu.edu
+
 James Fifer - jfifer@bu.edu 
+
