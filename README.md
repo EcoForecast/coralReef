@@ -9,3 +9,5 @@ Shelby Sundquist - sundqshe@bu.edu
 
 James Fifer - jfifer@bu.edu 
 
+Kathryn Wheeler - kiwheel@bu.edu
+
