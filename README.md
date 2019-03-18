@@ -11,3 +11,6 @@ James Fifer - jfifer@bu.edu
 
 Kathryn Wheeler - kiwheel@bu.edu
 
+##Cron job to run the coral reef forecast (now just downloading and plotting data)
+
+0 7 * * * mainCoralReefForecast.R
