@@ -30,7 +30,7 @@ for(y in years){
     dy <- substr(strsplit(subFileName,"_")[[1]][4],8,9)
     for(t in 1:length(timeSeqs)){
       SSTvals <- c(SSTvals,SST[lat,lon,t])
-      dateVals <- c(dateVals,paste(y,"-",mth,"-",dy," ",timeSeq[t],sep=""))
+      dateVals <- c(dateVals,paste(y,"-",mth,"-",dy," ",timeSeqs[t],sep=""))
     }
   }
 }
