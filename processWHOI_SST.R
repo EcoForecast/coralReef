@@ -26,9 +26,10 @@ processWHOI_SST <- function(years,lat,long,dataDirectory){
       mth <- substr(strsplit(files[f],"_")[[1]][4],6,7)
       dy <- substr(strsplit(files[f],"_")[[1]][4],8,9)
       for(t in 1:length(timeSeqs)){
-        SSTvals <- c(SSTvals,SST[lat,lon,t])
+        SSTvals <- c(SSTvals,SST[lat,long,t])
         dateVals <- c(dateVals,as.POSIXct(paste(years[y],"-",mth,"-",dy," ",timeSeqs[t],sep="")))
       }
+      nc_close(WHOIdat)
     }
   }
   return(cbind(dateVals,SSTvals))
