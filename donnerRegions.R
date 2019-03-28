@@ -49,7 +49,16 @@ RegionalMeans=function(df) {
   }
   
   df1=data.frame(LATITUDE=mean(df$LATITUDE), LONGITUDE=mean(df$LONGITUDE), YEAR=unique(df$YEAR), SEVERITY_CODE=sev)
-  df2 = rbind(df1, Hughes)
+  #Removing duplicated years from Hughes
+  hix=c()
+  for (a in 1:length(y)) {
+    ix=Hughes$YEAR==y[a]
+    hix=c(hix, which(ix==TRUE))
+  }
+  Hughes1=Hughes[-c(hix),]
+  #Binding reduced Hughes dataset with aggregated regional data
+   df2 = rbind(df1, Hughes1)
+  
   return(df2)
 }
 #Runs function for each region
