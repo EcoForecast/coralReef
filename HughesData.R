@@ -4,11 +4,10 @@
 
 HughesData <- function() {
   
-Hughes <- data.frame("LOCATION" = "Florida Keys", "LATITUDE" = NA, "LONGITUDE" = NA, "MONTH" = NA, "DEPTH"=NA, 
+Hughes <- data.frame( "LATITUDE" = NA, "LONGITUDE" = NA, 
                      "YEAR" = 1980:2016,
                      "SEVERITY_CODE" = c(NA, 0, 0, NA, 0, NA, 0, NA, 0, NA, NA, 0, 0, 0, 0, 0, 0,
-                                     NA, NA, NA, NA, 0, 0, NA, NA, NA, NA, NA, 0, 0, 0, NA,  0, 0, NA, NA, 0),
-                     "PERCENT_BLEACHED" = NA, "MORTALITY_CODE" = NA)
+                                     NA, NA, NA, NA, 0, 0, NA, NA, NA, NA, NA, 0, 0, 0, NA,  0, 0, NA, NA, 0))
 
 return(Hughes)
 }
