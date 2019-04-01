@@ -35,7 +35,7 @@ donner_regions <- function(years) {
   UpperKeys1=FLdat.short[c(UKcols),]
   
   BBcols=c(grep("25.3", FLdat.short$LATITUDE), grep("25.4", FLdat.short$LATITUDE), grep("25.5", FLdat.short$LATITUDE), grep("26", FLdat.short$LATITUDE))
-  BiscayneBay1=FLdat.short[c(UKcols),]
+  BiscayneBay1=FLdat.short[c(BBcols),]
   
   #Runs function for each region
   DryTortugas=RegionalMeans(DryTortugas1)
