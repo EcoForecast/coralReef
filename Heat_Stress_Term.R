@@ -1,4 +1,6 @@
 
+#function based on https://coralreefwatch.noaa.gov/satellite/methodology/methodology.php
+
 #calculate MMM_SST_climatology by taking mean for hottest month 
 
 # HotSpot = SST - MMM_SST_climatology #do this twice-weekly, MMM_SST_climatology stays constant 
