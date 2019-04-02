@@ -16,17 +16,47 @@ library(tidyr)
 library(dplyr)
 library(reshape2)
 library(zoo)
-data<-read.csv(file = "Dry_Tortugas.csv")
 
-data1.5<-separate(data, dateVals, c("year","month","day.hr"), sep = "-", remove = TRUE, convert = FALSE)
-data2<-separate(data1.5, day.hr, c("day", "hr"), sep = " ", remove = TRUE, convert = FALSE)
-Monthly_means <- data2 %>%
-  group_by(month) %>%
+#BB = BiscayneBay, MK = MiddleKeys, LK = LowerKeys, DT = DryTortugas, UK = UpperKeys
+#Output Format = matrix with three columns (region, dateVals, SSTVals)
+BB <- read.csv("Biscayne_Bay.csv")
+bb <- rep("BB", nrow(BB))
+BB$X <- bb
+
+MK <- read.csv("Middle_Keys.csv")
+mk <- rep("MK", nrow(MK))
+MK$X <- mk
+
+LK <- read.csv("Lower_Keys.csv")
+lk <- rep("LK", nrow(LK))
+LK$X <- lk
+
+DT <- read.csv("Dry_Tortugas.csv")
+dt <- rep("DT", nrow(DT))
+DT$X <- dt
+
+UK <- read.csv("Upper_Keys.csv")
+uk <- rep("UK", nrow(UK))
+UK$X <- uk
+
+keys1 <- rbind(BB, MK)
+keys2 <- rbind(keys1, LK)
+keys3 <- rbind(keys2, DT)
+keys <- rbind(keys3, UK)
+
+#Cleaning up
+library(tidyr)
+colnames(keys)[1] <- "region"
+keys <- separate(keys, dateVals, c("year","month","day.hr"), sep = "-", remove = TRUE, convert = FALSE)
+keys <-separate(keys, day.hr, c("day", "hr"), sep = " ", remove = TRUE, convert = FALSE)
+
+Monthly_means <- keys %>%
+  group_by(region, month) %>%
   summarise(SST_climatology = mean(SSTvals,na.rm=TRUE))
 
 MMM_SST_climatology<- max(Monthly_means$SST_climatology)#hottest mean month
-sub.data <- data2 %>%
-  group_by(year,month,day) %>%
+sub.data <- keys %>%
+  group_by(region,year,month,day) %>%
   summarise(dailySST = mean(SSTvals,na.rm=TRUE))
 
 biweekly.data <- sub.data[sub.data$day %in% c('02','05','09',12,15,18,22,27), ]
