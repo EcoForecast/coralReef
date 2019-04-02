@@ -69,15 +69,15 @@ for(i in 1:length(biweekly.data$dailySST)){
 biweekly.data$sum <- rollsumr(biweekly.data$hotspot, k = 24, fill = NA)
 biweekly.data$DHWs <- biweekly.data$sum * 0.5
 
-biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
-biweekly.data$stress <- ifelse(biweekly.data$DHWs < 0, 'No stress')
-biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
-biweekly.data$stress <- ifelse(biweekly.data$DHWs > 4, 'Bleaching Alert lvl 1')
 
-biweekly.data$stress<-ifelse(biweekly.data$hotspot < 0, 'No stress', 
-       ifelse(biweekly.data$hotspot > 0 , 'Bleaching Watch', 
-              ifelse(biweekly.data$DHWs > 4 && biweekly.data$hotspot < 8, 'Bleaching Alert lvl 1',
-                    ifelse(biweekly.data$DHWs > 8 , 'Bleaching Alert lvl 2', NA)
-              )      
-       )
-)
+count_df<- biweekly.data %>% group_by(year, region) %>%
+  summarise(count.hotspot = sum(hotspot>0))
+
+final_df <- as.data.frame(t(count_df))
+
+# biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
+# biweekly.data$stress <- ifelse(biweekly.data$DHWs < 0, 'No stress')
+# biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
+# biweekly.data$stress <- ifelse(biweekly.data$DHWs > 4, 'Bleaching Alert lvl 1')
+
+
