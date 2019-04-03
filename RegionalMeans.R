@@ -3,7 +3,8 @@
 ##' @param df Dataframe with region data
 ##' @param years The desired years
 ##' @export
-RegionalMeans=function(df,years) {
+RegionalMeans=function(df,years,Hughes) {
+  Hughes <- HughesData()
   x=c()
   sev=c()
   y=unique(df$YEAR)

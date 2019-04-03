@@ -14,11 +14,15 @@
 # Bleaching Alert Level 1	1 <= HotSpot and 4 <= DHW < 8		Bleaching Likely
 # Bleaching Alert Level 2	   1 <= HotSpot and 8 <= DHW		Mortality Likely 
 
-library(tidyr)
-library(dplyr)
-library(reshape2)
-library(zoo)
-
+##Function to calculate hot spot values for the 5 regions
+##'
+##' @param years The desired years
+##' @import tidyr
+##' @import dplyr
+##' @import reshape2
+##' @import zoo
+##' @export
+Heat_Stress_Term <- function(years) {
 #BB = BiscayneBay, MK = MiddleKeys, LK = LowerKeys, DT = DryTortugas, UK = UpperKeys
 #Output Format = matrix with three columns (region, dateVals, SSTVals)
 BB <- read.csv("Biscayne_Bay.csv")
@@ -77,9 +81,22 @@ count_df<- biweekly.data %>% group_by(year, region) %>%
 
 final_df <- as.data.frame(t(count_df))
 
+##Format to be the desired dimensions (rows being regions, columns being years)
+output <- matrix(nrow=5,ncol=length(years))
+regions <- c("BB","MK", "LK", "DT", "UK")
+for(y in 1:length(years)){
+  for(r in 1:length(regions)){
+    subDat <- final_df[,(final_df[2,]==regions[r] &final_df[1,]==years[y])]
+    if(length(subDat)==3){
+      output[r,y] <- as.numeric(as.character(subDat[3]))
+    }
+  }
+}
+output[is.na(output)] <- 0
+
 # biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
 # biweekly.data$stress <- ifelse(biweekly.data$DHWs < 0, 'No stress')
 # biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
 # biweekly.data$stress <- ifelse(biweekly.data$DHWs > 4, 'Bleaching Alert lvl 1')
-
-
+return(output)
+}
