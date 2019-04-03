@@ -71,7 +71,7 @@ for(i in 1:length(biweekly.data$dailySST)){
 biweekly.data$sum <- rollsumr(biweekly.data$hotspot, k = 24, fill = NA)
 biweekly.data$DHWs <- biweekly.data$sum * 0.5
 
-
+biweekly.data<-  na.omit(biweekly.data)
 count_df<- biweekly.data %>% group_by(year, region) %>%
   summarise(count.hotspot = sum(hotspot>0))
 
