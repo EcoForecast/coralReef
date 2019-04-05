@@ -75,15 +75,15 @@ for(i in 1:length(biweekly.data$dailySST)){
 biweekly.data$sum <- rollsumr(biweekly.data$hotspot, k = 24, fill = NA)
 biweekly.data$DHWs <- biweekly.data$sum * 0.5
 
-biweekly.data<-  na.omit(biweekly.data)
+biweekly.data <-  na.omit(biweekly.data)
 count_df<- biweekly.data %>% group_by(year, region) %>%
   summarise(count.hotspot = sum(hotspot>0))
 
 final_df <- as.data.frame(t(count_df))
 
 ##Format to be the desired dimensions (rows being regions, columns being years)
-output <- matrix(nrow=5,ncol=length(years))
-regions <- c("BB","MK", "LK", "DT", "UK")
+output <- matrix(nrow=4,ncol=length(years))
+regions <- c("LK","MK","UK","BB")
 for(y in 1:length(years)){
   for(r in 1:length(regions)){
     subDat <- final_df[,(final_df[2,]==regions[r] &final_df[1,]==years[y])]
@@ -92,7 +92,7 @@ for(y in 1:length(years)){
     }
   }
 }
-output[is.na(output)] <- 0
+#output[is.na(output)] <- 0
 
 # biweekly.data$stress <- ifelse(biweekly.data$hotspot > 0 && biweekly.data$hotspot <1 , 'Bleaching Watch', NA)
 # biweekly.data$stress <- ifelse(biweekly.data$DHWs < 0, 'No stress')
