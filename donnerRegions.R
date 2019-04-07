@@ -3,9 +3,9 @@
 ##' @param years The desired years
 ##' @export
 donner_regions <- function(years) {
-  source("scrapeCoral.R")
-  source("HughesData.R")
-  source("RegionalMeans.R")
+  #source("scrapeCoral.R")
+  #source("HughesData.R")
+  #source("RegionalMeans.R")
   #Coral bleaching data
   FLdat <- scrapeCoral()
   Hughes <- HughesData()
@@ -44,10 +44,10 @@ donner_regions <- function(years) {
   UpperKeys=RegionalMeans(UpperKeys1)
   BiscayneBay=RegionalMeans(BiscayneBay1)
   
-  output <- matrix(nrow=5,ncol=0)
+  output <- numeric()
   for(y in 1:length(years)){
-    currentDat <- c(DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE,
-                    LowerKeys[LowerKeys$YEAR==years[y],]$SEVERITY_CODE,
+    #DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE,
+    currentDat <- c(LowerKeys[LowerKeys$YEAR==years[y],]$SEVERITY_CODE,
                     MiddleKeys[MiddleKeys$YEAR==years[y],]$SEVERITY_CODE,
                     UpperKeys[UpperKeys$YEAR==years[y],]$SEVERITY_CODE,
                     BiscayneBay[BiscayneBay$YEAR==years[y],]$SEVERITY_CODE)
