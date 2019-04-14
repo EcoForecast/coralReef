@@ -6,8 +6,8 @@ HughesData <- function() {
   
 Hughes <- data.frame( "LATITUDE" = NA, "LONGITUDE" = NA, 
                      "YEAR" = 1980:2016,
-                     "SEVERITY_CODE" = c(NA, 0, 0, NA, 0, NA, 0, NA, 0, NA, NA, 0, 0, 0, 0, 0, 0,
-                                     NA, NA, NA, NA, 0, 0, NA, NA, NA, NA, NA, 0, 0, 0, NA,  0, 0, NA, NA, 0))
+                     "SEVERITY_CODE" = c(1, 0, 0, 2, 0, 1, 0, 2, 0, 1, 2, 0, 0, 0, 0, 0, 0,
+                                     2, 2,1,1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1,  0, 0, 1, 2, 0))
 
 return(Hughes)
 }

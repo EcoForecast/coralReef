@@ -5,14 +5,19 @@
 ##' @import rjags
 ##' @export
 createCoralForecastModel <- function(data,nchain){
+  inits <- list()
+  for(i in 1:5){
+    inits[[i]] <- list(beta0 = rnorm(1,0,0.2), beta1 = rnorm(1,4,0.1))
+  }
+  print(inits)
   coralForecastModel <- "
   model{
   ##Loop over regions
   for(r in 1:nr){
-    x[r,1] ~ dunif(0,1000)
+    x[r,1] <- 0
     for(t in 2:nt){
       #mu[r,t] <- beta1 * S[r,t] + beta0 + year[t] + reg[r] ##Process model
-      muP[r,t] <- beta0 * b[r,(t-1)]+ beta1 * S[r,t] + year[t] + reg[r]
+      muP[r,t] <- beta0 * x[r,(t-1)]+ beta1 * S[r,t] + year[t] + reg[r]
       x[r,t] ~ dnorm(muP[r,t],tau_proc)
       b[r,t] ~ dcat(probs[r,t,])
 
@@ -32,11 +37,12 @@ createCoralForecastModel <- function(data,nchain){
   for(t in 1:nt){ 
     year[t] ~ dnorm(0,tau_yr)   ## year effects
   }
+
   #### Priors
   #beta1 ~ dnorm(mu.b1,p.b1)
   #beta0 ~ dnorm(mu.b0,p.b0)
   beta0 ~ dunif(-100,100)
-  beta1 ~ dunif(0,1000)
+  beta1 ~ dunif(0,100)
   tau_reg ~ dgamma(1,0.1)
   tau_yr  ~ dgamma(1,0.1)
   tau_proc ~ dgamma(1,0.1)
@@ -49,6 +55,7 @@ createCoralForecastModel <- function(data,nchain){
 
   j.model   <- jags.model(file = textConnection(coralForecastModel),
                           data = data,
+                          inits = inits,
                           n.chains=nchain)
 }
 

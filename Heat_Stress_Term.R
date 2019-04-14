@@ -82,8 +82,8 @@ count_df<- biweekly.data %>% group_by(year, region) %>%
 final_df <- as.data.frame(t(count_df))
 
 ##Format to be the desired dimensions (rows being regions, columns being years)
-output <- matrix(nrow=4,ncol=length(years))
-regions <- c("LK","MK","UK","BB")
+output <- matrix(nrow=5,ncol=length(years))
+regions <- c("LK","MK","UK","BB","DT")
 for(y in 1:length(years)){
   for(r in 1:length(regions)){
     subDat <- final_df[,(final_df[2,]==regions[r] &final_df[1,]==years[y])]

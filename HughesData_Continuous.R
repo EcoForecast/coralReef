@@ -11,6 +11,7 @@ HughesData_continuous <- function() {
   for (a in 1:nrow(Hughes)) {
     if (Hughes[a,4]==1) {Hughes[a,4]=runif(1, min=1, max=30)}
     else if (Hughes[a, 4]==2) {Hughes[a,4]=runif(1, min=30, max=100)}
+    #Hughes[a, 4] <- NA
   }
   
   return(Hughes)
