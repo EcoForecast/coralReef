@@ -40,6 +40,6 @@ RegionalMeans_continuous=function(df,years,Hughes) {
   df2 = rbind(df1, Hughes1)
   df2 <- df2[order(df2$YEAR),]
   
-  return(df1)
+  return(df2)
 }
 
