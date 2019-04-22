@@ -2,13 +2,13 @@
 ##' 
 ##' @param years The desired years
 ##' @export
-donner_regions <- function(years) {
+donner_regions_continuous <- function(years) {
   #source("scrapeCoral.R")
   #source("HughesData.R")
   #source("RegionalMeans.R")
   #Coral bleaching data
   FLdat <- scrapeCoral()
-  Hughes <- HughesData()
+  Hughes <- HughesData_continuous()
   #Remove unneccessary columns; qualitative or NA values
   FLdat.short= FLdat[c(2,4, 5, 7, 9)]
   
@@ -38,19 +38,25 @@ donner_regions <- function(years) {
   BiscayneBay1=FLdat.short[c(BBcols),]
   
   #Runs function for each region
-  DryTortugas=RegionalMeans(DryTortugas1)
-  LowerKeys=RegionalMeans(LowerKeys1)
-  MiddleKeys=RegionalMeans(MiddleKeys1)
-  UpperKeys=RegionalMeans(UpperKeys1)
-  BiscayneBay=RegionalMeans(BiscayneBay1)
+  DryTortugas=RegionalMeans_continuous(DryTortugas1)
+  LowerKeys=RegionalMeans_continuous(LowerKeys1)
+  MiddleKeys=RegionalMeans_continuous(MiddleKeys1)
+  UpperKeys=RegionalMeans_continuous(UpperKeys1)
+  BiscayneBay=RegionalMeans_continuous(BiscayneBay1)
+  
+  #Insert function that changes discrete 0:2 data to percentage bleaching
+  #Hughes data --> 0 no bleaching, M 1-30%, S >30%
+  #Donner data --> -1 unknown, 0 no bleaching, 1 1-10%, 2 10-50%, 3 >50%
+  #rnorm Hughes and donner datas separately, then combine
   
   output <- numeric()
   for(y in 1:length(years)){
-    #DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE,
+    #
     currentDat <- c(LowerKeys[LowerKeys$YEAR==years[y],]$SEVERITY_CODE,
                     MiddleKeys[MiddleKeys$YEAR==years[y],]$SEVERITY_CODE,
                     UpperKeys[UpperKeys$YEAR==years[y],]$SEVERITY_CODE,
-                    BiscayneBay[BiscayneBay$YEAR==years[y],]$SEVERITY_CODE)
+                    BiscayneBay[BiscayneBay$YEAR==years[y],]$SEVERITY_CODE,
+                    DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE)
     output <- cbind(output,currentDat)
   }
   colnames(output) <- years
