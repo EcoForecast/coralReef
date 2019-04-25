@@ -13,6 +13,7 @@ source("Heat_Stress_Term.R")
 source("fillMissingBleachingData.R")
 source("HughesData.R")
 source("runForecastIter.R")
+source("forecastCoralUncertModel.R")
 library("ncdf4")
 library("RCurl")
 library("XML")
@@ -68,17 +69,27 @@ for(i in 1:5){
 }
 abline(lm(ys~xs),col="red")
 
+calFitFile <- "HistoricalFit_continuous_simulatedBleachingData.R"
+if(!file.exists(calFitFile)){
 ##Creating Model
 j.model <- createCoralForecastModelContinuous(data=data,nchain = 5)
 
 ##Running Model until convergence
-varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x"),iterSize = 10000,baseNum = 10000)
+varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","year","reg"),iterSize = 50000,baseNum = 30000)
 summary(varOut$params)
 
 #out.mat <- as.matrix(varOut)
 plot(varOut$params) 
 
+##Thin Data:
+
+out.mat <- as.matrix(varOut$params)
+varOut <- window(varOut,thin=(nrow(out.mat)/5000))
+
+
 ##Save historical fit
 save(varOut,file="HistoricalFit_continuous_simulatedBleachingData.R")
+}
 
+load(calFitFile)
 
