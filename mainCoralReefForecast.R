@@ -49,7 +49,7 @@ data$x <- donner_regions_continuous(years=years)
 #data$b2 <- donner_regions(years=years)
 data$x <- data$x[1:5,]
 data$S <- Heat_Stress_Term(years=years)
-data <- fillMissingBleachingData(data=data)
+data <- fillMissingBleachingData(dat=data)
 plot(data$S,data$x,pch=20)
 
 ##Simulating bleached data:
@@ -75,11 +75,14 @@ if(!file.exists(calFitFile)){
 j.model <- createCoralForecastModelContinuous(data=data,nchain = 5)
 
 ##Running Model until convergence
-varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","year","reg"),iterSize = 50000,baseNum = 30000)
+varOut <- coda.samples(model=j.model,variable.names =c("beta0","beta1","tau_reg","tau_yr","x"), n.iter=100)
+varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","tau_proc","year","reg","rec"),iterSize = 5000,baseNum = 2000)
 summary(varOut$params)
 
+
 #out.mat <- as.matrix(varOut)
-plot(varOut$params) 
+plot(varOut$params)
+plot(varOut$predict)
 
 ##Thin Data:
 
@@ -93,3 +96,9 @@ save(varOut,file="HistoricalFit_continuous_simulatedBleachingData.R")
 
 load(calFitFile)
 
+out.mat=as.data.frame(as.matrix(varOut$params))
+out.mat2=as.data.frame(as.matrix(varOut$predict))
+
+years <- seq(1988,2016) #The years for the forecast calibration
+S <- Heat_Stress_Term(years=years)
+uncertainty_anal(out.mat, out.mat2, S, Nmc=5)
