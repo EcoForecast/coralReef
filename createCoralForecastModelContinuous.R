@@ -19,8 +19,8 @@ createCoralForecastModelContinuous <- function(data,nchain){
     rec[r, t-1] ~ dgamma(6, 10) #Informed prior on bleaching recovery time
     layover[r,t] <- x[r,t-1] - rec[r, t-1]
     mu[r,t] <- beta0 * layover[r,t] + beta1 * S[r,t] + year[t] + reg[r] ##Process model
-    x[r,t] ~ dnorm(mu[r,t],tau_proc) 
-    #x[r,t]<- min(x[r,t], 1) #cap at 100% bleaching
+    xl[r,t] ~ dnorm(mu[r,t],tau_proc) 
+    x[r,t]<- min(xl[r,t], 1) #cap at 100% bleaching
   }
   reg[r] ~ dnorm(0,tau_reg) ## individual effects
   }  ## end loop over regions
