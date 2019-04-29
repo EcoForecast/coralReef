@@ -14,6 +14,8 @@ source("fillMissingBleachingData.R")
 source("HughesData.R")
 source("runForecastIter.R")
 source("forecastCoralUncertModel.R")
+source("UncertaintyAnalysis.R")
+source("UncertaintyPlot.R")
 library("ncdf4")
 library("RCurl")
 library("XML")
@@ -88,8 +90,8 @@ j.model <- createCoralForecastModelContinuous(data=data,nchain = 5)
 
 ##Running Model until convergence
 varOut <- coda.samples(model=j.model,variable.names =c("beta0","beta1","tau_reg","tau_yr","x"), n.iter=100)
-varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","tau_proc","year","reg","rec"),iterSize = 5000,baseNum = 5000)
-summary(varOut$params)
+varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr", "tau_proc", "x", "reg"),iterSize = 5000,baseNum = 2000)
+summary(varOut$params)#,"tau_proc","year","reg","rec")
 
 
 #out.mat <- as.matrix(varOut)
@@ -115,4 +117,7 @@ out.mat2=as.data.frame(as.matrix(varOut$predict))
 
 years <- seq(1988,2016) #The years for the forecast calibration
 S <- Heat_Stress_Term(years=years)
-uncertainty_anal(out.mat, out.mat2, S, Nmc=5)
+param.ci <- uncertainty_anal(out.mat, out.mat2, S, Nmc=50)
+
+plot_uncertainty(param.ci, out.mat2)
+
