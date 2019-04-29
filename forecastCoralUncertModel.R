@@ -19,7 +19,8 @@ ForecastCoralUncertModel <- function(IC,beta0,beta1,year,reg,rec,Q=0,n,S){
   for(t in 1:nt){
     layover=rec * Xprev
     mu <- beta0 * layover + beta1 * S[r,t]+ year[t] + reg[r] ##Process model
-    x[r,t,] <- rlnorm(n,mu,Q)
+    xl[r,t] <- min(mu[r,t],1)
+    x[r,t,] <- rlnorm(n,xl,Q)
     Xprev <- x[r,t,]
     #x[r,t] <-  dnorm(mu[r,t],tau_proc)
   }

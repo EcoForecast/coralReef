@@ -50,7 +50,19 @@ data$x <- donner_regions_continuous(years=years)
 data$x <- data$x[1:5,]
 data$S <- Heat_Stress_Term(years=years)
 data <- fillMissingBleachingData(dat=data)
-plot(data$S,data$x,pch=20)
+
+
+plot(x=c(),y=c(),pch=20,ylim=c(0,1),xlim=range(years),xlab="Year",ylab="Bleaching Percent")
+#lines(data$S[1,],data$x[1,])
+
+lines(years,data$x[2,],col="red")
+lines(years,data$x[3,],col="blue")
+lines(years,data$x[4,],col="brown")
+lines(years,data$x[5,],col="cyan")
+
+plot(x=data$S,y=data$x,pch=20,ylim=c(0,1),xlim=c(0,20),ylab="Bleaching Percent",xlab="Heat Stress")
+#lines(data$S[1,],data$x[1,])
+
 
 ##Simulating bleached data:
 # data$b <- round(data$S/4,digits=0)
@@ -76,7 +88,7 @@ j.model <- createCoralForecastModelContinuous(data=data,nchain = 5)
 
 ##Running Model until convergence
 varOut <- coda.samples(model=j.model,variable.names =c("beta0","beta1","tau_reg","tau_yr","x"), n.iter=100)
-varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","tau_proc","year","reg","rec"),iterSize = 5000,baseNum = 2000)
+varOut <- runForecastIter(j.model=j.model,variableNames =c("beta0","beta1","tau_reg","tau_yr","x","tau_proc","year","reg","rec"),iterSize = 5000,baseNum = 5000)
 summary(varOut$params)
 
 
@@ -93,6 +105,8 @@ varOut <- window(varOut,thin=(nrow(out.mat)/5000))
 ##Save historical fit
 save(varOut,file="HistoricalFit_continuous_simulatedBleachingData.R")
 }
+
+
 
 load(calFitFile)
 
