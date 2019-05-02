@@ -8,12 +8,12 @@
 ##' @param Q Process error (default = 0 for deterministic runs)
 ##' @param n Size of Monte Carlo ensemble
 ##' @param S Heat stress covariate
+##' @param nr The number of regions
+##' @param nt The number of years
 ##' @export
-ForecastCoralUncertModel <- function(IC, beta0, beta1, reg, year, rec, Q, n, S){
-  nr=5
-  nt=13
+ForecastCoralUncertModel <- function(IC, beta0, beta1, reg, year, rec, Q, n, S,nr=5,nt=13){
   x <- array(dim=c(nr,nt,n))
-  Xprev <- IC[1,i]
+  Xprev <- IC
     for(r in 1:nr){
       for(t in 1:nt){
         for (i in 1:n) {

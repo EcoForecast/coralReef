@@ -51,12 +51,12 @@ donner_regions_continuous <- function(years) {
   
   output <- numeric()
   for(y in 1:length(years)){
-    #
-    currentDat <- c(LowerKeys[LowerKeys$YEAR==years[y],]$SEVERITY_CODE,
-                    MiddleKeys[MiddleKeys$YEAR==years[y],]$SEVERITY_CODE,
-                    UpperKeys[UpperKeys$YEAR==years[y],]$SEVERITY_CODE,
-                    BiscayneBay[BiscayneBay$YEAR==years[y],]$SEVERITY_CODE,
-                    DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE)
+    currentDat <- c(LowerKeys[LowerKeys$YEAR==years[y],]$SEVERITY_CODE[1],
+                    MiddleKeys[MiddleKeys$YEAR==years[y],]$SEVERITY_CODE[1],
+                    UpperKeys[UpperKeys$YEAR==years[y],]$SEVERITY_CODE[1],
+                    BiscayneBay[BiscayneBay$YEAR==years[y],]$SEVERITY_CODE[1],
+                    DryTortugas[DryTortugas$YEAR==years[y],]$SEVERITY_CODE[1])
+
     output <- cbind(output,currentDat)
   }
   colnames(output) <- years
