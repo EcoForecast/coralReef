@@ -11,13 +11,12 @@ RegionalMeans_continuous=function(df,years,Hughes) {
   Hughes <- HughesData_continuous()
 
   #Donner data --> -1 unknown, 0 no bleaching, 1 1-10%, 2 10-50%, 3 >50%
-  print(nrow(df))
+
   while(min(df[,5])<0){ #when row is removed, that index gets skipped - this keeps the loop going
   for (a in 1:nrow(df)) {
     if(is.na(df[a,5])) {break} #so it doesn't throw boolean NA
     if(df[a,5]<0) {df=df[-c(a),]}
   }}
-  print(nrow(df))
   
   for (a in 1:nrow(df)){
     if (df[a,5]==1) {df[a,5]=runif(1, min=1, max=10)}
