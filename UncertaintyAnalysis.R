@@ -156,11 +156,11 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   tau.mc.reg <- 1/sqrt(params[prow,"tau_reg"])
   aNew.mc.reg <- matrix(nrow=5, ncol=Nmc)
   for(n in 1:Nmc) {
-    aNew.mc.reg[1,n] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[2,n] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[3,n] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[4,n] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[5,n] <- rnorm(1,0,tau.mc.reg[n])
+    aNew.mc.reg[1,n] <- rnorm(1,param.mean["reg[1]"],tau.mc.reg[n])
+    aNew.mc.reg[2,n] <- rnorm(1,param.mean["reg[2]"],tau.mc.reg[n])
+    aNew.mc.reg[3,n] <- rnorm(1,param.mean["reg[3]"],tau.mc.reg[n])
+    aNew.mc.reg[4,n] <- rnorm(1,param.mean["reg[4]"],tau.mc.reg[n])
+    aNew.mc.reg[5,n] <- rnorm(1,param.mean["reg[5]"],tau.mc.reg[n])
   }
   
   tau.mc.y <- 1/sqrt(params[prow,"tau_yr"])
