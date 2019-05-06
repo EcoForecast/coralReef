@@ -20,7 +20,7 @@ for(r in 1:5) {
   col=col+r
   bp=out.mat2[,col]
   bp.ci=apply(bp, 2,quantile,c(0.025,0.5,0.975))
-  plot(t1, bp.ci[2,], xlim=c(1988, 2016), ylim=c(0, 1.1),
+  plot(t1, bp.ci[2,], xlim=c(1988, 2016), ylim=c(.05, .95),
        xlab="year", ylab="percent bleaching", main=(paste(loc[r], "Uncertainty", sep=" ")))
   ecoforecastR::ciEnvelope(t1,bp.ci[1,],bp.ci[3,],col=col.alpha("lightBlue", .6))
   lines(t1, bp.ci[2,], col="blue")
@@ -30,10 +30,7 @@ for(r in 1:5) {
   ecoforecastR::ciEnvelope(t2,N.IP.ci[r,,1],N.IP.ci[r,,3],col=col.alpha("red",trans))
   ecoforecastR::ciEnvelope(t2,N.I.ci[r,,1],N.I.ci[r,,3],col=col.alpha("black",trans))
   lines(t2,N.det[r,,1],lwd=0.5, col="purple")
-  legend("topleft", legend=c("IC", "Param", "Driver", "Process", "Random"), 
-         fill=c('black','red','green','blue','orange'))
-  #Add legend
+  #legend("bottomleft", legend=c("IC", "Param", "Driver", "Process", "Random"), 
+         #fill=c('black','red','green','blue','orange'))
 }
 }
-#add regions title (figure out which is which)
-

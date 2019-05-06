@@ -5,7 +5,7 @@
 ##' @param Nmc number of ensemble members to run
 ##' @export 
 
-uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
+uncertainty_allout <- function(out.mat, out.mat2, S, Nmc){
   
   params <- as.matrix(out.mat)
   IC <- as.matrix(out.mat2)
@@ -26,7 +26,7 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   reg.sample[3,] = param.mean["reg[3]"]
   reg.sample[4,] = param.mean["reg[4]"]
   reg.sample[5,] = param.mean["reg[5]"]
-
+  
   S.sample <- array(dim=c(5, 13, Nmc))
   for(r in 1:5) {
     for (t in 1:13) {
@@ -34,29 +34,29 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
     }
   }
   
-    yr.sample <- array(dim=c(5,13,Nmc))
-    tau_yr = param.mean["tau_yr"]
-   #year needs to be the same when tau_yr is the same (for all years per run)
-    for(r in 1:5) {
-      for (t in 1:13) {
-        if((max(0, tau_yr)==0) | tau_yr==0) {
-          yr.sample[r,t,] <- rnorm(1, 0, 0)
-        }
-        else{
-          yr.sample[r,t,] <- rnorm(1, 0, 1/sqrt(tau_yr))
-        }
+  yr.sample <- array(dim=c(5,13,Nmc))
+  tau_yr = param.mean["tau_yr"]
+  #year needs to be the same when tau_yr is the same (for all years per run)
+  for(r in 1:5) {
+    for (t in 1:13) {
+      if((max(0, tau_yr)==0) | tau_yr==0) {
+        yr.sample[r,t,] <- rnorm(1, 0, 0)
+      }
+      else{
+        yr.sample[r,t,] <- rnorm(1, 0, 1/sqrt(tau_yr))
       }
     }
-    
-    rec.sample <- array(dim=c(5, 13, Nmc))
-    for (r in 1:5) {
-      for (t in 1:13) {
-        for (n in 1:Nmc) {
-          rec.sample[r,t,]<- rgamma(1,6, 10) #Distribution same as jags model; not worth translating output
-        } #recovery varies at region, time, and run. But not between uncertainty analyses
-      }
+  }
+  
+  rec.sample <- array(dim=c(5, 13, Nmc))
+  for (r in 1:5) {
+    for (t in 1:13) {
+      for (n in 1:Nmc) {
+        rec.sample[r,t,]<- rgamma(1,6, 10) #Distribution same as jags model; not worth translating output
+      } #recovery varies at region, time, and run. But not between uncertainty analyses
     }
-    
+  }
+  
   N.det<- ForecastCoralUncertModel(IC=IC.sample, #Mean IC in 2003, after model calibration
                                    beta0=rep(param.mean["beta0"], Nmc),
                                    beta1=rep(param.mean["beta1"], Nmc),
@@ -81,13 +81,13 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
                                  n=Nmc,
                                  S=S.sample)
   print("1/5")
-
+  
   reg.sample[1,] = params[prow, "reg[1]"]
   reg.sample[2,] = params[prow, "reg[2]"]
   reg.sample[3,] = params[prow, "reg[3]"]
   reg.sample[4,] = params[prow, "reg[4]"]
   reg.sample[5,] = params[prow, "reg[5]"]
-
+  
   tau_yr = params[prow, "tau_yr"]
   for (n in 1:Nmc) {
     for(r in 1:5) {
@@ -101,7 +101,7 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
       }
     }
   }
-
+  
   for (r in 1:5) {
     for (t in 1:13) {
       for (n in 1:Nmc) {
@@ -111,14 +111,14 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   }
   
   N.IP<- ForecastCoralUncertModel(IC=IC.sample,
-                                 beta0=params[prow, "beta0"], #Parameters beta0 and beta1
-                                 beta1=params[prow, "beta1"],
-                                 reg=reg.sample,
-                                 year=yr.sample,
-                                 rec=rec.sample,
-                                 Q=0,
-                                 n=Nmc,
-                                 S=S.sample)
+                                  beta0=params[prow, "beta0"], #Parameters beta0 and beta1
+                                  beta1=params[prow, "beta1"],
+                                  reg=reg.sample,
+                                  year=yr.sample,
+                                  rec=rec.sample,
+                                  Q=0,
+                                  n=Nmc,
+                                  S=S.sample)
   print("2/5")
   
   S_u=S.sample
@@ -164,11 +164,11 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   }
   
   tau.mc.y <- 1/sqrt(params[prow,"tau_yr"])
-    for(r in 1:5) {
-      for (t in 1:13) {
-        yr.sample[r,t,] <- rnorm(Nmc, 0,tau.mc.y[n])
-      }
+  for(r in 1:5) {
+    for (t in 1:13) {
+      yr.sample[r,t,] <- rnorm(Nmc, 0,tau.mc.y[n])
     }
+  }
   
   N.IPDEA<- ForecastCoralUncertModel(IC=IC.sample,
                                      beta0=params[prow, "beta0"],
@@ -182,23 +182,7 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   
   print("5/5")
   
-  nr=5 #Could use these at top but don't feel like fiddling with code now
-  nt=13
-  N.I.ci = array(dim=c(nr, nt, 3))
-  N.IP.ci = array(dim=c(nr, nt, 3))
-  N.IPD.ci = array(dim=c(nr, nt, 3))
-  N.IPDE.ci = array(dim=c(nr, nt, 3))
-  N.IPDEA.ci = array(dim=c(nr, nt, 3))
-  for (r in 1:nr) {
-    for(t in 1:nt) {
-    N.I.ci[r,t,] = quantile(N.I[r,t,],c(0.025,0.5,0.975))
-    N.IP.ci[r,t,] = quantile(N.IP[r,t,],c(0.025,0.5,0.975))
-    N.IPD.ci[r,t,] = quantile(N.IPD[r,t,],c(0.025,0.5,0.975))
-    N.IPDE.ci[r,t,] = quantile(N.IPDE[r,t,],c(0.025,0.5,0.975))
-    N.IPDEA.ci[r,t,] = quantile(N.IPDEA[r,t,],c(0.025,0.5,0.975))
-    }
-  }
-  uncertainty_out<-list(N.det, N.I.ci, N.IP.ci, N.IPD.ci, N.IPDE.ci, N.IPDEA.ci) 
+  uncertainty_out<-list(N.det, N.I, N.IP, N.IPD, N.IPDE, N.IPDEA) 
   
   return(uncertainty_out)
 }
