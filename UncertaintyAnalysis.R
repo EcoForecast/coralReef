@@ -11,7 +11,7 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   IC <- as.matrix(out.mat2)
   param.mean <-apply(params, 2, mean)
   
-  prow <- sample.int(nrow(IC), Nmc, replace=TRUE)#(nrow(params), Nmc, replace=TRUE) #random sample of parameter values
+  prow <- sample.int(nrow(params), Nmc, replace=TRUE) #random sample of parameter values
   Qmc <- 1/sqrt(params[prow, "tau_proc"]) #Convert to SD
   IC.sample <- matrix(nrow=5, ncol=Nmc)
   IC.sample[1,] = mean(IC[,"x[1,16]"])
