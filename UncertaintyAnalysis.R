@@ -5,14 +5,13 @@
 ##' @param Nmc number of ensemble members to run
 ##' @export 
 
-##Reference: ForecastCoralUncertModel <- function(IC,beta0,beta1,tau_yr,reg,Q,n,S)
 uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   
   params <- as.matrix(out.mat)
   IC <- as.matrix(out.mat2)
   param.mean <-apply(params, 2, mean)
   
-  prow <- sample.int(nrow(params), Nmc, replace=TRUE) #random sample of parameter values
+  prow <- sample.int(nrow(IC), Nmc, replace=TRUE)#(nrow(params), Nmc, replace=TRUE) #random sample of parameter values
   Qmc <- 1/sqrt(params[prow, "tau_proc"]) #Convert to SD
   IC.sample <- matrix(nrow=5, ncol=Nmc)
   IC.sample[1,] = mean(IC[,"x[1,16]"])
@@ -82,7 +81,7 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
                                  n=Nmc,
                                  S=S.sample)
   print("1/5")
-  
+
   reg.sample[1,] = params[prow, "reg[1]"]
   reg.sample[2,] = params[prow, "reg[2]"]
   reg.sample[3,] = params[prow, "reg[3]"]
@@ -157,11 +156,11 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
   tau.mc.reg <- 1/sqrt(params[prow,"tau_reg"])
   aNew.mc.reg <- matrix(nrow=5, ncol=Nmc)
   for(n in 1:Nmc) {
-    aNew.mc.reg[1,] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[2,] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[3,] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[4,] <- rnorm(1,0,tau.mc.reg[n])
-    aNew.mc.reg[5,] <- rnorm(1,0,tau.mc.reg[n])
+    aNew.mc.reg[1,n] <- rnorm(1,param.mean["reg[1]"],tau.mc.reg[n])
+    aNew.mc.reg[2,n] <- rnorm(1,param.mean["reg[2]"],tau.mc.reg[n])
+    aNew.mc.reg[3,n] <- rnorm(1,param.mean["reg[3]"],tau.mc.reg[n])
+    aNew.mc.reg[4,n] <- rnorm(1,param.mean["reg[4]"],tau.mc.reg[n])
+    aNew.mc.reg[5,n] <- rnorm(1,param.mean["reg[5]"],tau.mc.reg[n])
   }
   
   tau.mc.y <- 1/sqrt(params[prow,"tau_yr"])
@@ -199,7 +198,6 @@ uncertainty_anal <- function(out.mat, out.mat2, S, Nmc){
     N.IPDEA.ci[r,t,] = quantile(N.IPDEA[r,t,],c(0.025,0.5,0.975))
     }
   }
-  
   uncertainty_out<-list(N.det, N.I.ci, N.IP.ci, N.IPD.ci, N.IPDE.ci, N.IPDEA.ci) 
   
   return(uncertainty_out)
