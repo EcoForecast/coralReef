@@ -1,5 +1,5 @@
 ##' Creates the calibration ensemble
-##' @param out.mat
+##' @param out.mat Matrix of the parameter values
 ##' @param Nmc The number of ensembles
 ##' @export
 createCalEnsemble <- function(out.mat,Nmc,nYears){

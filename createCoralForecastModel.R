@@ -1,7 +1,7 @@
 ##Script to create the forecast jags model
 ##'
-##' @param data 
-##' @param nchain
+##' @param data Data object
+##' @param nchain Number of chains
 ##' @import rjags
 ##' @export
 createCoralForecastModel <- function(data,nchain){

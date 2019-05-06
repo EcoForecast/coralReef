@@ -1,10 +1,10 @@
 ##' Returns confidence intervals with different model uncertanties for uncertainty analysis
+##' 
 ##' @param out.mat jags parameter output matrix (beta0, beta1, reg[1:5], tau_reg, tau_proc, tau_yr)
 ##' @param out.mat2 jags prediction output matrix (x[,16] --> IC)
 ##' @param S heat stress 1988 to 2016
 ##' @param Nmc number of ensemble members to run
 ##' @export 
-
 uncertainty_allout <- function(out.mat, out.mat2, S, Nmc){
   
   params <- as.matrix(out.mat)

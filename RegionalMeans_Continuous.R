@@ -1,12 +1,8 @@
-#Continuous scale for donner data bleaching
-
-
-##Function to consolidate regional datasets and add Hughes data
+##Function to consolidate regional datasets and add Hughes data (for continuous data)
 ##'
 ##' @param df Dataframe with region data
 ##' @param years The desired years
 ##' @export
-
 RegionalMeans_continuous=function(df,years,Hughes) {
   Hughes <- HughesData_continuous()
 
