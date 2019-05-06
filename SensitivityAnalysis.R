@@ -1,5 +1,7 @@
+##' Creates the sensitivity plots
+##'
 ##' @param param.all is output from uncertainty analysis
-
+##' @export
 SensitivityPlot <- function(param.all) {
   
   t2=2004:2016

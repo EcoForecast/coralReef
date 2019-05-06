@@ -1,15 +1,10 @@
 ##Script to create the forecast jags model
 ##'
-##' @param data 
-##' @param nchain
+##' @param data Data object
+##' @param nchain Number of chains
 ##' @import rjags
 ##' @export
 createCoralForecastModelContinuous <- function(data,nchain){
-  # inits <- list()
-  # for(i in 1:5){
-  #   inits[[i]] <- list(beta0 = rnorm(1,0,0.2), beta1 = rnorm(1,4,0.1))
-  # }
-  # print(inits)
   coralForecastModel <- "
   model{
   ##Loop over regions
@@ -48,6 +43,6 @@ createCoralForecastModelContinuous <- function(data,nchain){
 
   j.model   <- jags.model(file = textConnection(coralForecastModel),
                           data = data,
-                          n.chains=nchain) # inits = inits,
+                          n.chains=nchain) 
 }
 
